@@ -1,5 +1,5 @@
 const verify = require('../middlewares/auth');
-const User = require('../models/user');
+const User = require('../models/User');
 const router = require('express').Router();
 
 // delete user
@@ -16,5 +16,9 @@ router.delete('/', verify, async (req, res) => {
 });
 // get a user
 // get all users
+router.get('/all', async (req, res) => {
+  const users = await User.find();
+  res.status(200).json(users);
+});
 
 module.exports = router;

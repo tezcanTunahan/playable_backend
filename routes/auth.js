@@ -9,12 +9,12 @@ const verify = require('../middlewares/auth');
 // generete access token function
 const generateAccessToken = (user) => {
   return jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-    expiresIn: '1h',
+    expiresIn: '15m',
   });
 };
 // generate refresh token function
 const generateRefreshToken = (user) => {
-  return jwt.sign({ id: user.id }, process.env.JWT_REFRESH_SECRET);
+  return jwt.sign({ id: user.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
 };
 
 // register
@@ -40,43 +40,49 @@ router.post('/register', async (req, res) => {
 // login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+
   try {
     // find user by email in mongoDB
-    const user = await User.findOne({
-      email: email,
-    });
-    // if user not found
-    !user && res.status(404).send('User not found');
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
     // compare password
     const validPassword = await bcrypt.compare(password, user.password);
-    !validPassword && res.status(400).json('Wrong password');
+    if (!validPassword) {
+      return res.status(400).json({ message: 'Wrong password' });
+    }
 
-    // if user found and password is correct then generate access token
     // generate access token
     const accessToken = generateAccessToken(user);
-    // check if the user has a refresh token
+
+    // check if the user has a refresh token and delete if exists
     const oldRefreshToken = await Token.findOne({ userId: user._id });
     if (oldRefreshToken) {
       await Token.deleteOne({ userId: user._id });
     }
-    // generate refresh token
+
+    // generate new refresh token
     const refreshToken = generateRefreshToken(user);
+
     // save refresh token in mongoDB for future use
     const newRefreshToken = new Token({
       refreshToken,
       userId: user._id,
-      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 days expiry
     });
     await newRefreshToken.save();
+
     // response with access token and refresh token
-    res.status(200).json({
-      user: user.username,
-      accessToken: accessToken,
-      refreshToken: refreshToken,
+    return res.status(200).json({
+      username: user.username,
+      accessToken,
+      refreshToken,
     });
   } catch (err) {
-    res.status(500).json(err);
+    console.error('Login error:', err);
+    return res.status(500).json({ message: 'Internal server error' });
   }
 });
 
