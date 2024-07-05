@@ -15,7 +15,7 @@ const TodoSchema = new mongoose.Schema(
       max: 50,
     },
     status: {
-      type: boolean,
+      type: Boolean,
       required: true,
       min: 6,
     },
@@ -31,4 +31,4 @@ const TodoSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model.Todo || mongoose.model('Todo', TodoSchema);
+module.exports = mongoose.models.Todo || mongoose.model('Todo', TodoSchema);

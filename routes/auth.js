@@ -3,18 +3,22 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const verify = require('../middlewares/auth');
 
 // generete access token function
 const generateAccessToken = (user) => {
   return jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-    expiresIn: '15m',
+    expiresIn: '1h',
   });
 };
 
 // register
 router.post('/register', async (req, res) => {
   try {
+    // check if user already exists
+    const email = await User.findOne({ email: req.body.email });
+    if (email) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
     //  generate new hashed password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
