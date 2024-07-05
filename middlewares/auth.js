@@ -7,13 +7,13 @@ const verify = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
-        return res.status(403).json('Token is not valid!');
+        return res.status(403).json('Unauthorized');
       }
       req.user = user;
       next();
     });
   } else {
-    res.status(401).json('You are not authenticated!');
+    res.status(403).json('Unauthorized');
   }
 };
 

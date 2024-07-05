@@ -1,8 +1,8 @@
 // access token & refresh token
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const User = require('../models/user');
-const Token = require('../models/token');
+const User = require('../models/User');
+const Token = require('../models/Token');
 const jwt = require('jsonwebtoken');
 const verify = require('../middlewares/auth');
 
