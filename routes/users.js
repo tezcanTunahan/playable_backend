@@ -15,7 +15,7 @@ router.delete('/', verify, async (req, res) => {
   }
 });
 // get current user
-router.get('/', verify, async (req, res) => {
+router.get('/me', verify, async (req, res) => {
   if (req.user.id) {
     const user = await User.findById(req.user.id);
     if (!user) {
