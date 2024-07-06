@@ -7,7 +7,6 @@ const TodoSchema = new mongoose.Schema(
       required: true,
       min: 3,
       max: 20,
-      unique: true,
     },
     desc: {
       type: String,
