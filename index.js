@@ -11,12 +11,14 @@ const todoRoute = require('./routes/todo');
 dotenv.config();
 
 const app = express();
-app.use(
-  cors({
-    origin: 'https://playable-frontend.vercel.app/',
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: 'https://playable-frontend.vercel.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  allowedHeaders: 'Content-Type,Authorization',
+};
+
+app.use(cors(corsOptions));
 
 mongoose
   .connect(process.env.MONGO_URL)
