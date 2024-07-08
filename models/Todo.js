@@ -5,18 +5,17 @@ const TodoSchema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
-      min: 3,
-      max: 20,
+      minlength: 3,
+      maxlength: 20,
     },
     desc: {
       type: String,
       required: true,
-      max: 50,
+      maxlength: 50,
     },
     status: {
       type: Boolean,
       required: true,
-      min: 6,
     },
     img: {
       type: String,
@@ -30,4 +29,5 @@ const TodoSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Export the model or retrieve the existing one to avoid model overwrite errors in watch mode
 module.exports = mongoose.models.Todo || mongoose.model('Todo', TodoSchema);

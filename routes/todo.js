@@ -1,7 +1,7 @@
 const verify = require('../middlewares/auth');
 const router = require('express').Router();
 const Todo = require('../models/Todo');
-const { query, validationResult, body } = require('express-validator');
+const { query, validationResult, body, param } = require('express-validator');
 
 // POST /todo
 router.post(
@@ -18,59 +18,74 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
+    const { title, desc, img } = req.body;
     const newTodo = new Todo({
-      title: req.body.title,
-      desc: req.body.desc,
-      img: req.body.img,
+      title,
+      desc,
+      img,
       userId: req.user.id,
       status: false,
     });
 
     try {
       const todo = await newTodo.save();
-      res.status(200).json(todo);
+      res.status(201).json(todo); // Changed to 201 for resource creation
     } catch (err) {
-      res.status(500).json(err);
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
     }
   }
 );
-
 // delete Todo
-router.delete('/:id', verify, async (req, res) => {
+router.delete('/:id', verify, [param('id').isMongoId().withMessage('Invalid Todo ID')], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const userId = req.user.id;
   const todoId = req.params.id;
-  console.log(userId, todoId);
+
   try {
     const todo = await Todo.findOne({ userId: userId, _id: todoId });
-    if (todo) {
-      await todo.deleteOne();
-      res.status(200).json('Todo has been deleted...');
-    } else {
-      res.status(404).json('Todo not found...');
+
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
     }
+
+    await todo.deleteOne();
+    res.status(200).json({ message: 'Todo has been deleted' });
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
 // change todo status
-router.patch('/:id', verify, async (req, res) => {
+router.patch('/:id', verify, [param('id').isMongoId().withMessage('Invalid Todo ID')], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const userId = req.user.id;
   const todoId = req.params.id;
+
   try {
     const todo = await Todo.findOne({ userId: userId, _id: todoId });
-    if (todo) {
-      todo.status = !todo.status;
-      await todo.save();
-      res.status(200).json(todo);
-    } else {
-      res.status(404).json('Todo not found...');
+
+    if (!todo) {
+      return res.status(404).json({ message: 'Todo not found' });
     }
+
+    todo.status = !todo.status;
+    await todo.save();
+    res.status(200).json(todo);
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
-module.exports = router;
 
 // GET /todos?pages=1&limit=10
 router.get(
@@ -115,3 +130,5 @@ router.get(
     }
   }
 );
+
+module.exports = router;
