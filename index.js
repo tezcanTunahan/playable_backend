@@ -26,6 +26,10 @@ mongoose
     console.error('Failed to connect to MongoDB', err);
   });
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the homepage');
+});
+
 // Middleware
 app.use(express.json());
 app.use(helmet());
