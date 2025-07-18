@@ -12,6 +12,6 @@ export async function passwordMatchCheker(
 
 export const createAccesToken = (id: any, role: string) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "24h",
   });
 };

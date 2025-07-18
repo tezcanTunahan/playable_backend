@@ -4,19 +4,14 @@ import { RegisterRequestDto, LoginRequestDto } from "../dto/authDto";
 import { createAccesToken, passwordMatchCheker } from "../helpers/auth";
 
 const authService = {
-  register: async (req: Request<{}, {}, RegisterRequestDto>, res: Response) => {
-    await userService.createUser(req.body);
-    res.status(201).json({
-      message: "User registered successfully",
-    });
+  register: async (registerRequestDto: RegisterRequestDto) => {
+    await userService.createUser(registerRequestDto);
   },
 
-  login: async (req: Request<{}, {}, LoginRequestDto>, res: Response) => {
-    const { password, username } = req.body;
-    const user = await userService.getUserByUsername(username);
-    passwordMatchCheker(password, user.password);
-    const accessToken = createAccesToken(user._id, user.role);
-    res.status(200).json({ accessToken });
+  login: async (loginRequestDto: LoginRequestDto) => {
+    const user = await userService.getUserByUsername(loginRequestDto.username);
+    passwordMatchCheker(loginRequestDto.password, user.password);
+    return createAccesToken(user._id, user.role);
   },
 };
 
