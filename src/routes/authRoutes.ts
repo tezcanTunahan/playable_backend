@@ -1,10 +1,10 @@
 import express from "express";
-import { login, register } from "../services/authService";
+import authService, { login, register } from "../services/authService";
 import { asyncErrorHandler } from "../middlewares/error.middleware";
 
 const router = express.Router();
 
-router.post("/register", asyncErrorHandler(register));
-router.post("/login", asyncErrorHandler(login));
+router.post("/register", asyncErrorHandler(authService.register));
+router.post("/login", asyncErrorHandler(authService.login));
 
 export default router;
