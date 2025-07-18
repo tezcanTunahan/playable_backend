@@ -23,6 +23,10 @@ app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the playable studycase API!");
+});
+
 const server = http.createServer(app);
 
 const PORT = process.env.PORT || 8081;
