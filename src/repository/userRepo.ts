@@ -6,7 +6,8 @@ export const userRepo = {
 
   getUserById: (id: string) => UserModal.findById(id),
 
-  getUserByUsername: (username: string) => UserModal.findOne({ username }),
+  getUserByUsername: (username: string) =>
+    UserModal.findOne({ username }).select("+password"),
 
   // const createUser = (values: Record<string, any>) =>
   //   new UserModal(values).save().then((user) => user.toObject());

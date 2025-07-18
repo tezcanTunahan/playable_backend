@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import userService from "./userService";
 import { RegisterRequestDto, LoginRequestDto } from "../dto/authDto";
 import { createAccesToken, passwordMatchCheker } from "../helpers/auth";
@@ -10,8 +9,8 @@ const authService = {
 
   login: async (loginRequestDto: LoginRequestDto) => {
     const user = await userService.getUserByUsername(loginRequestDto.username);
-    passwordMatchCheker(loginRequestDto.password, user.password);
-    return createAccesToken(user._id, user.role);
+    await passwordMatchCheker(loginRequestDto.password, user.password);
+    return createAccesToken(user._id, user.role, user.username);
   },
 };
 

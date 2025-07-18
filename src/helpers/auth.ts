@@ -10,8 +10,8 @@ export async function passwordMatchCheker(
   if (!isMatch) throw new CustomError(404, "invalid credentials");
 }
 
-export const createAccesToken = (id: any, role: string) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+export const createAccesToken = (id: any, role: string, username: string) => {
+  return jwt.sign({ id, role, username }, process.env.JWT_SECRET, {
     expiresIn: "24h",
   });
 };

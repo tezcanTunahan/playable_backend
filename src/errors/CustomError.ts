@@ -15,11 +15,6 @@ class CustomError extends Error {
   ) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
-    this.code = code;
-    this.timestamp = timestamp;
-    this.path = path;
-    this.exception = exception;
-    this.subCode = subCode;
   }
 }
 
