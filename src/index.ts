@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import dbConnect from "./config/dbConnect";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
+import { errorMiddleware } from "./middlewares/error.middleware";
 
 const app = express();
 dotenv.config();
@@ -26,6 +27,8 @@ app.use("/users", userRoutes);
 app.get("/", (req, res) => {
   res.send("Welcome to the playable studycase API!");
 });
+
+app.use(errorMiddleware);
 
 const server = http.createServer(app);
 
