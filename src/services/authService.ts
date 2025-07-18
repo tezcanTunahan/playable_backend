@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { createUser, getUserByUsername } from "../models/users";
 import CustomError from "../errors/CustomError";
-
-type RegisterRequestDto = {
+import userService from "./userService";
+export type RegisterRequestDto = {
   username: string;
   password: string;
   role: string;
@@ -14,13 +13,7 @@ export const register = async (
   req: Request<{}, {}, RegisterRequestDto>,
   res: Response
 ) => {
-  const { password, username, role } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  await createUser({
-    username,
-    password: hashedPassword,
-    role,
-  });
+  await userService.createUser(req.body);
   res.status(201).json({
     message: "User registered successfully",
   });
@@ -37,8 +30,7 @@ export const login = async (
 ) => {
   const { password, username } = req.body;
 
-  const user = await getUserByUsername(username);
-  if (!user) throw new CustomError(404, "User not found");
+  const user = await userService.getUserByUsername(username);
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new CustomError(404, "invalid credentials");
