@@ -1,6 +1,6 @@
 import { userRepo } from "../repository/userRepo";
 import CustomError from "../errors/CustomError";
-import { RegisterRequestDto } from "./authService";
+import { RegisterRequestDto } from "../dto/authDto";
 import bcrypt from "bcryptjs";
 
 const userService = {
