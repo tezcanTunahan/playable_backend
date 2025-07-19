@@ -1,4 +1,4 @@
-import { UserModal } from "../models/users";
+import { UserModal } from "../model/users";
 
 export const userRepo = {
   createUser: (values: Record<string, any>) =>

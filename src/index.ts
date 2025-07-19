@@ -5,9 +5,10 @@ import compression from "compression";
 import cors from "cors";
 import dotenv from "dotenv";
 import dbConnect from "./config/dbConnect";
-import authRoutes from "./routes/authRoutes";
-import userRoutes from "./routes/userRoutes";
 import { errorMiddleware } from "./middlewares/error.middleware";
+import authRoutes from "./features/auth/routes/authRoutes";
+import userRoutes from "./features/user/routes/userRoutes";
+import productRoutes from "./features/products/routes/productRoutes";
 
 const app = express();
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
+app.use("/products", productRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the playable studycase API!");

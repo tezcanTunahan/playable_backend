@@ -1,4 +1,4 @@
-import CustomError from "../errors/CustomError";
+import CustomError from "../../../errors/CustomError";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 

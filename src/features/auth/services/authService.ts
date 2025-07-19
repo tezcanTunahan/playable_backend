@@ -1,4 +1,4 @@
-import userService from "./userService";
+import userService from "../../../features/user/services/userService";
 import { RegisterRequestDto, LoginRequestDto } from "../dto/authDto";
 import { createAccesToken, passwordMatchCheker } from "../helpers/auth";
 

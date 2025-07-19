@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
-import { asyncErrorHandler } from "../middlewares/error.middleware";
-import { verifyToken } from "../middlewares/authMiddleware";
-import { authorizeRole } from "../middlewares/roleMiddleware";
+import { asyncErrorHandler } from "../../../middlewares/error.middleware";
+import { verifyToken } from "../../../middlewares/authMiddleware";
+import { authorizeRole } from "../../../middlewares/roleMiddleware";
 import userService from "../services/userService";
 
 const router = express.Router();

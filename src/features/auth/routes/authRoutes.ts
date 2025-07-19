@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { RegisterRequestDto, LoginRequestDto } from "../dto/authDto";
 
 import authService from "../services/authService";
-import { asyncErrorHandler } from "../middlewares/error.middleware";
+import { asyncErrorHandler } from "../../../middlewares/error.middleware";
 
 const router = express.Router();
 
