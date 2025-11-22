@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { RegisterDto } from "../dtos/request/registerRequestDto.js";
-import User from "../entitiy/userModel.js";
+import User from "../entitiy/User.js";
 import bcrypt from "bcryptjs";
 import { LoginRequestDto } from "../dtos/request/loginRequestDto.js";
 
