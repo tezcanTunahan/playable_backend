@@ -1,12 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { RoleDto } from "../dtos/request/registerRequestDto.js";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: any;
-    }
-  }
+interface JwtPayload {
+  id: string;
+  role: RoleDto;
 }
 
 export const verifyToken = (
@@ -24,8 +22,11 @@ export const verifyToken = (
   }
   try {
     const secret = process.env.JWT_SECRET || ""; // fix it;
-    const decode = jwt.verify(token, secret);
-    req.user = decode;
+    const decoded = jwt.verify(token, secret) as JwtPayload;
+    req.user = {
+      id: decoded.id,
+      role: decoded.role,
+    };
     console.log(req.user);
     next();
   } catch (error) {}
