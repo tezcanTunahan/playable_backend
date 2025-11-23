@@ -11,8 +11,8 @@ router.post("/register", async (req: Request<{}, {}, RegisterDto>, res) => {
 });
 
 router.post("/login", async (req: Request<{}, {}, LoginRequestDto>, res) => {
-  const token = await login(req.body);
-  res.status(201).json({ token });
+  const accessToken = await login(req.body);
+  res.status(201).json({ accessToken });
 });
 
 export default router;
