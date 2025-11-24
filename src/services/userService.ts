@@ -14,5 +14,12 @@ export const createUser = async (registerDto: RegisterDto) => {
     password: registerDto.password,
     role: "user" as RoleDto,
   });
-  await newUser.save();
+  try {
+    await newUser.save();
+  } catch (error: any) {
+    if (error.code === 11000) {
+      throw new CustomError(400, "Bu kullanıcı zaten mevcut");
+    }
+    throw new CustomError(500, "Kullanıcı oluşturulamadı");
+  }
 };
