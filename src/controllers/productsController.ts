@@ -13,7 +13,7 @@ router.get(
   verifyToken,
   authorizeRoles("admin", "user"),
   asyncErrorHandler(async (req: Request, res: Response) => {
-    res.json("products route");
+    res.status(200).json("products route");
   })
 );
 

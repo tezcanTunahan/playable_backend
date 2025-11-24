@@ -10,7 +10,7 @@ router.get(
   verifyToken,
   authorizeRoles("admin"),
   asyncErrorHandler(async (req, res) => {
-    res.json("admin route");
+    res.status(200).json("admin route");
   })
 );
 
@@ -19,7 +19,7 @@ router.get(
   verifyToken,
   authorizeRoles("admin", "user"),
   asyncErrorHandler(async (req, res) => {
-    res.json("user route");
+    res.status(200).json("user route");
   })
 );
 
