@@ -6,6 +6,7 @@ import usersController from "./controllers/userController.js";
 import productsController from "./controllers/productsController.js";
 
 import cors from "cors";
+import { errorHandler } from "./middlewares/errorMiddleware.js";
 
 dotenv.config();
 dbConnect();
@@ -27,6 +28,9 @@ app.use("/products", productsController);
 app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
+
+// error middleware must be placed at the end, after all routes.
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server is running at port: ${PORT}`);
