@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { RegisterDto } from "../dtos/request/registerRequestDto.js";
+import { RegisterDto, RoleDto } from "../dtos/request/registerRequestDto.js";
 import User from "../entitiy/User.js";
 import bcrypt from "bcryptjs";
 import { LoginRequestDto } from "../dtos/request/loginRequestDto.js";
@@ -9,7 +9,7 @@ export const register = async (registerDto: RegisterDto) => {
   const newUser = new User({
     username: registerDto.username,
     password: hashedPassword,
-    role: registerDto.role,
+    role: "user" as RoleDto,
   });
   try {
     await newUser.save();
@@ -27,7 +27,7 @@ export const login = async (loginRequestDto: LoginRequestDto) => {
   if (!isMatch) throw new Error("password dont match");
   const secret = process.env.JWT_SECRET || ""; // fix it
   const token = jwt.sign({ id: user._id, role: user.role }, secret, {
-    expiresIn: "1h",
+    expiresIn: "30d",
   });
   return token;
 };

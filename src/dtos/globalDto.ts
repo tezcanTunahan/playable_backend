@@ -7,7 +7,7 @@ declare global {
       role: RoleDto;
     }
     interface Request {
-      user: User;
+      user?: User;
     }
   }
 }
