@@ -27,7 +27,6 @@ export const verifyToken = (
       id: decoded.id,
       role: decoded.role,
     };
-    console.log(req.user);
     next();
   } catch (error) {
     return res.status(401).json({ message: "auth denied: " + error });
