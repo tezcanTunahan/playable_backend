@@ -18,7 +18,7 @@ export const verifyToken = (
     token = authHeader.split(" ")[1];
   }
   if (!token) {
-    throw res.status(401).json("no token auth denied");
+    return res.status(401).json("no token auth denied");
   }
   try {
     const secret = process.env.JWT_SECRET || ""; // fix it;
@@ -29,5 +29,7 @@ export const verifyToken = (
     };
     console.log(req.user);
     next();
-  } catch (error) {}
+  } catch (error) {
+    return res.status(401).json({ message: "auth denied: " + error });
+  }
 };

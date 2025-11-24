@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import { dbConnect } from "./configs/dbConnect.js";
 import authController from "./controllers/authController.js";
 import usersController from "./controllers/userController.js";
+import productsController from "./controllers/productsController.js";
+
 import cors from "cors";
 
 dotenv.config();
@@ -20,6 +22,7 @@ app.use(
 );
 app.use("/auth", authController);
 app.use("/users", usersController);
+app.use("/products", productsController);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");

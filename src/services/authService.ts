@@ -27,7 +27,7 @@ export const login = async (loginRequestDto: LoginRequestDto) => {
   if (!isMatch) throw new Error("password dont match");
   const secret = process.env.JWT_SECRET || ""; // fix it
   const token = jwt.sign({ id: user._id, role: user.role }, secret, {
-    expiresIn: "1h",
+    expiresIn: "30d",
   });
   return token;
 };
