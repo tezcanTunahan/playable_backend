@@ -1,31 +1,22 @@
 import jwt from "jsonwebtoken";
-import { RegisterDto, RoleDto } from "../dtos/request/registerRequestDto.js";
-import User from "../entitiy/User.js";
+import { RegisterDto } from "../dtos/request/registerRequestDto.js";
 import bcrypt from "bcryptjs";
 import { LoginRequestDto } from "../dtos/request/loginRequestDto.js";
+import { createUser, getUserByUsername } from "./userService.js";
 
 export const register = async (registerDto: RegisterDto) => {
   const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-  const newUser = new User({
+  await createUser({
     username: registerDto.username,
     password: hashedPassword,
-    role: "user" as RoleDto,
   });
-  try {
-    await newUser.save();
-  } catch (error) {
-    throw new Error("register error");
-  }
 };
 
 export const login = async (loginRequestDto: LoginRequestDto) => {
-  const user = await User.findOne({ username: loginRequestDto.username });
-  if (!user) {
-    throw new Error("user not found");
-  }
+  const user = await getUserByUsername(loginRequestDto.username);
   const isMatch = await bcrypt.compare(loginRequestDto.password, user.password);
   if (!isMatch) throw new Error("password dont match");
-  const secret = process.env.JWT_SECRET || ""; // fix it
+  const secret = process.env.JWT_SECRET || ""; // fix it laatterrrr
   const token = jwt.sign({ id: user._id, role: user.role }, secret, {
     expiresIn: "30d",
   });

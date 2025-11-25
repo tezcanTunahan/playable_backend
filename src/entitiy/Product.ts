@@ -4,8 +4,10 @@ const ProductSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     desc: { type: String, required: true },
-    stock: { type: Number, required: true },
     imgUrl: { type: String, required: true },
+    active: { type: Boolean, required: true },
+    price: { type: Number, required: true },
+    stock: { type: Number, required: true },
   },
   {
     timestamps: true,

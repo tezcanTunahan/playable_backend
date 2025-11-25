@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { RoleDto } from "../dtos/request/registerRequestDto.js";
+import { CustomError } from "../errors/customError.js";
 
 interface JwtPayload {
   id: string;
@@ -18,7 +19,7 @@ export const verifyToken = (
     token = authHeader.split(" ")[1];
   }
   if (!token) {
-    return res.status(401).json("no token auth denied");
+    throw new CustomError(401, "no token auth");
   }
   try {
     const secret = process.env.JWT_SECRET || ""; // fix it;
@@ -27,9 +28,8 @@ export const verifyToken = (
       id: decoded.id,
       role: decoded.role,
     };
-    console.log(req.user);
     next();
   } catch (error) {
-    return res.status(401).json({ message: "auth denied: " + error });
+    throw new CustomError(401, "auth denied: " + error);
   }
 };
