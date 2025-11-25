@@ -19,6 +19,7 @@ export const updateProduct = async (
   product.active = productRequestDto.active;
   product.price = productRequestDto.price;
   product.stock = productRequestDto.stock;
+  product.category = productRequestDto.category;
   await product.save();
 };
 

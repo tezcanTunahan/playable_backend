@@ -1,3 +1,4 @@
+import z from "zod";
 import { RoleDto } from "./request/registerRequestDto.js";
 
 declare global {
@@ -11,3 +12,6 @@ declare global {
     }
   }
 }
+
+export const CategoryDtoSchema = z.enum(["tech", "food", "books"]);
+export type CategoryDto = z.infer<typeof CategoryDtoSchema>;
