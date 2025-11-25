@@ -15,9 +15,10 @@ export const updateProduct = async (
   const product = await getProductById(id);
   product.title = productRequestDto.title;
   product.desc = productRequestDto.desc;
+  product.imgUrl = productRequestDto.imgUrl;
+  product.active = productRequestDto.active;
   product.price = productRequestDto.price;
   product.stock = productRequestDto.stock;
-  product.imgUrl = productRequestDto.imgUrl;
   await product.save();
 };
 
