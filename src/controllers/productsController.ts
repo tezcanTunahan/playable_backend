@@ -4,6 +4,7 @@ import { verifyToken } from "../middlewares/authMiddleware.js";
 import { authorizeRoles } from "../middlewares/roleMiddleware.js";
 import {
   createProduct,
+  deleteProduct,
   getProdcuts,
   getProductById,
   updateProduct,
@@ -50,6 +51,17 @@ router.get(
     const { id } = req.params;
     const prodcut = await getProductById(id);
     res.status(200).json(prodcut);
+  })
+);
+
+router.delete(
+  "/:id",
+  verifyToken,
+  authorizeRoles("admin"),
+  asyncErrorHandler(async (req: Request<{ id?: string }>, res: Response) => {
+    const { id } = req.params;
+    await deleteProduct(id);
+    return res.status(200).json({ message: "Product deleted successfully" });
   })
 );
 
