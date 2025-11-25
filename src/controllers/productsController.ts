@@ -12,10 +12,17 @@ router.get(
   "/",
   verifyToken,
   authorizeRoles("admin", "user"),
-  asyncErrorHandler(async (req: Request, res: Response) => {
-    const prodcuts = await getProdcuts(1, 10);
-    res.status(200).json(prodcuts);
-  })
+  asyncErrorHandler(
+    async (
+      req: Request<{}, {}, {}, { page?: string; pageSize?: string }>,
+      res: Response
+    ) => {
+      const page = Number(req.query.page) || 1;
+      const pageSize = Number(req.query.pageSize) || 10;
+      const prodcuts = await getProdcuts(page, pageSize);
+      res.status(200).json(prodcuts);
+    }
+  )
 );
 
 router.post(
