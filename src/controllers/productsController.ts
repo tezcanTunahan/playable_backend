@@ -2,7 +2,7 @@ import express, { type Response, type Request } from "express";
 
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { authorizeRoles } from "../middlewares/roleMiddleware.js";
-import { createProduct } from "../services/productService.js";
+import { createProduct, getProdcuts } from "../services/productService.js";
 import { ProductRequestDto } from "../dtos/request/productRequestDto.js";
 import { asyncErrorHandler } from "../middlewares/errorMiddleware.js";
 
@@ -13,7 +13,8 @@ router.get(
   verifyToken,
   authorizeRoles("admin", "user"),
   asyncErrorHandler(async (req: Request, res: Response) => {
-    res.status(200).json("products route");
+    const prodcuts = await getProdcuts(1, 10);
+    res.status(200).json(prodcuts);
   })
 );
 
