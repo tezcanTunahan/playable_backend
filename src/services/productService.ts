@@ -22,6 +22,15 @@ export const updateProduct = async (
   await product.save();
 };
 
+export const setActiveProduct = async (active: boolean, id?: string) => {
+  if (!id) throw new CustomError(400, "id not found!!");
+  console.log("acti", active);
+
+  const product = await getProductById(id);
+  product.active = active;
+  await product.save();
+};
+
 export const deleteProduct = async (id?: string) => {
   if (!id) throw new CustomError(400, "id not found!!");
   await Product.deleteOne({ _id: id });

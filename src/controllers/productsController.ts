@@ -7,6 +7,7 @@ import {
   deleteProduct,
   getProdcuts,
   getProductById,
+  setActiveProduct,
   updateProduct,
 } from "../services/productService.js";
 import { ProductRequestDto } from "../dtos/request/productRequestDto.js";
@@ -77,6 +78,24 @@ router.put(
       const { id } = req.params;
       await updateProduct(req.body, id);
       return res.status(200).json({ message: "Product updated successfully" });
+    }
+  )
+);
+
+router.patch(
+  "/:id",
+  verifyToken,
+  authorizeRoles("admin"),
+  asyncErrorHandler(
+    async (
+      req: Request<{ id?: string }, any, { active: boolean }>,
+      res: Response
+    ) => {
+      const { id } = req.params;
+      await setActiveProduct(req.body.active, id);
+      return res
+        .status(200)
+        .json({ message: "Product  change activity succecfully" });
     }
   )
 );
