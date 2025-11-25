@@ -2,7 +2,12 @@ import express, { type Response, type Request } from "express";
 
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { authorizeRoles } from "../middlewares/roleMiddleware.js";
-import { createProduct, getProdcuts } from "../services/productService.js";
+import {
+  createProduct,
+  getProdcuts,
+  getProductById,
+  updateProduct,
+} from "../services/productService.js";
 import { ProductRequestDto } from "../dtos/request/productRequestDto.js";
 import { asyncErrorHandler } from "../middlewares/errorMiddleware.js";
 
@@ -33,6 +38,33 @@ router.post(
     async (req: Request<{}, {}, ProductRequestDto>, res: Response) => {
       await createProduct(req.body);
       return res.status(200).json({ message: "Product created successfully" });
+    }
+  )
+);
+
+router.get(
+  "/:id",
+  verifyToken,
+  authorizeRoles("admin", "user"),
+  asyncErrorHandler(async (req: Request<{ id?: string }>, res: Response) => {
+    const { id } = req.params;
+    const prodcut = await getProductById(id);
+    res.status(200).json(prodcut);
+  })
+);
+
+router.put(
+  "/:id",
+  verifyToken,
+  authorizeRoles("admin"),
+  asyncErrorHandler(
+    async (
+      req: Request<{ id?: string }, any, ProductRequestDto>,
+      res: Response
+    ) => {
+      const { id } = req.params;
+      await updateProduct(req.body, id);
+      return res.status(200).json({ message: "Product updated successfully" });
     }
   )
 );
