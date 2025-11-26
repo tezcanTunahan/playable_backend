@@ -49,13 +49,18 @@ export const getProdcuts = async (
   minPrice?: string,
   maxPrice?: string,
   sortBy?: "price" | "title" | "createdAt",
-  sortOrder?: "asc" | "desc"
+  sortOrder?: "asc" | "desc",
+  category?: "tech" | "food" | "books" | "all"
 ) => {
   const query: any = {};
 
   if (search) {
     query.title = { $regex: search, $options: "i" }; // case-insensitive
   }
+  if (category && category !== "all") {
+    query.category = category;
+  }
+
   if (minPrice !== undefined || maxPrice !== undefined) {
     query.price = {};
     if (minPrice !== undefined) query.price.$gte = minPrice;
