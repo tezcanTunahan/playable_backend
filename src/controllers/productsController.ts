@@ -21,12 +21,35 @@ router.get(
   authorizeRoles("admin", "user"),
   asyncErrorHandler(
     async (
-      req: Request<{}, {}, {}, { page?: string; pageSize?: string }>,
+      req: Request<
+        {},
+        {},
+        {},
+        {
+          page?: string;
+          pageSize?: string;
+          search?: string;
+          minPrice?: string;
+          maxPrice?: string;
+          sortBy?: "price" | "title" | "createdAt";
+          sortOrder?: "asc" | "desc";
+        }
+      >,
       res: Response
     ) => {
+      const { maxPrice, minPrice, search, sortBy, sortOrder } = req.query;
       const page = Number(req.query.page) || 1;
       const pageSize = Number(req.query.pageSize) || 10;
-      const prodcuts = await getProdcuts(page, pageSize);
+
+      const prodcuts = await getProdcuts(
+        page,
+        pageSize,
+        search,
+        minPrice,
+        maxPrice,
+        sortBy,
+        sortOrder
+      );
       res.status(200).json(prodcuts);
     }
   )

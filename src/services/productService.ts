@@ -25,8 +25,6 @@ export const updateProduct = async (
 
 export const setActiveProduct = async (active: boolean, id?: string) => {
   if (!id) throw new CustomError(400, "id not found!!");
-  console.log("acti", active);
-
   const product = await getProductById(id);
   product.active = active;
   await product.save();
@@ -44,11 +42,36 @@ export const getProductById = async (id?: string) => {
   return product;
 };
 
-export const getProdcuts = async (page: number, pageSize: number) => {
-  const products = await Product.find()
+export const getProdcuts = async (
+  page: number,
+  pageSize: number,
+  search?: string,
+  minPrice?: string,
+  maxPrice?: string,
+  sortBy?: "price" | "title" | "createdAt",
+  sortOrder?: "asc" | "desc"
+) => {
+  const query: any = {};
+
+  if (search) {
+    query.title = { $regex: search, $options: "i" }; // case-insensitive
+  }
+  if (minPrice !== undefined || maxPrice !== undefined) {
+    query.price = {};
+    if (minPrice !== undefined) query.price.$gte = minPrice;
+    if (maxPrice !== undefined) query.price.$lte = maxPrice;
+  }
+  let sortOption: any = {};
+  if (sortBy) {
+    sortOption[sortBy] = sortOrder === "desc" ? -1 : 1;
+  }
+
+  const products = await Product.find(query)
     .skip((page - 1) * pageSize)
+    .sort(sortOption)
     .limit(pageSize);
-  const totalElements = await Product.countDocuments();
+
+  const totalElements = await Product.countDocuments(query);
   return {
     data: products,
     totalElements,
