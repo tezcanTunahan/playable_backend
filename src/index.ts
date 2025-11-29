@@ -4,6 +4,7 @@ import { dbConnect } from "./configs/dbConnect.js";
 import authController from "./controllers/authController.js";
 import usersController from "./controllers/userController.js";
 import productsController from "./controllers/productsController.js";
+import cartController from "./controllers/cartController.js";
 
 import cors from "cors";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
@@ -24,6 +25,7 @@ app.use(
 app.use("/auth", authController);
 app.use("/users", usersController);
 app.use("/products", productsController);
+app.use("/cart", cartController);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");

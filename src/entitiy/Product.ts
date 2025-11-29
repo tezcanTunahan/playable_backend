@@ -8,6 +8,7 @@ const ProductSchema = new mongoose.Schema(
     active: { type: Boolean, required: true },
     price: { type: Number, required: true },
     stock: { type: Number, required: true },
+    category: { type: String, required: true, enum: ["tech", "food", "books"] },
   },
   {
     timestamps: true,
