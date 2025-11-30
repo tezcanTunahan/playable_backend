@@ -19,7 +19,10 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "http://t8kgsc04808ow44wwosw404s.69.62.113.223.sslip.io",
+    ],
     credentials: true,
   })
 );
