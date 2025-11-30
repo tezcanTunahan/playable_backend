@@ -14,3 +14,11 @@ export const createOrder = async (userId: string) => {
   await Cart.deleteMany({ userId });
   return orders;
 };
+
+export const getOrdersByUserId = async (userId: string) => {
+  return await Order.find({ userId }).populate("product");
+};
+
+export const getOrders = async () => {
+  return await Order.find();
+};
