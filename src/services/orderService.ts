@@ -31,5 +31,5 @@ export const getOrdersByUserId = async (userId: string) => {
 };
 
 export const getOrders = async () => {
-  return await Order.find();
+  return await Order.find().populate("product");
 };
