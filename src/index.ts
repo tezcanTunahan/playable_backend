@@ -33,7 +33,7 @@ app.use("/cart", cartController);
 app.use("/order", orderController);
 
 app.get("/", (req, res) => {
-  res.send("Hello, World -test!");
+  res.send("Hello, World !");
 });
 
 // error middleware must be placed at the end, after all routes.
