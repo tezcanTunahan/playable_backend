@@ -1,6 +1,7 @@
 import Product from "../entitiy/Product.js";
 import { ProductRequestDto } from "../dtos/request/productRequestDto.js";
 import { CustomError } from "../errors/customError.js";
+import { RoleDto } from "../dtos/request/registerRequestDto.js";
 
 export const createProduct = async (productRequestDto: ProductRequestDto) => {
   const newProduct = new Product(productRequestDto);
@@ -43,6 +44,7 @@ export const getProductById = async (id?: string) => {
 };
 
 export const getProdcuts = async (
+  role: RoleDto,
   page: number,
   pageSize: number,
   search?: string,
@@ -53,6 +55,11 @@ export const getProdcuts = async (
   category?: "tech" | "food" | "books" | "all"
 ) => {
   const query: any = {};
+
+  if (role == "user") {
+    query.active = true;
+    query.stock = { $gt: 0 };
+  }
 
   if (search) {
     query.title = { $regex: search, $options: "i" }; // case-insensitive

@@ -12,6 +12,7 @@ import {
 } from "../services/productService.js";
 import { ProductRequestDto } from "../dtos/request/productRequestDto.js";
 import { asyncErrorHandler } from "../middlewares/errorMiddleware.js";
+import { CustomError } from "../errors/customError.js";
 
 const router = express.Router();
 
@@ -38,12 +39,15 @@ router.get(
       >,
       res: Response
     ) => {
+      if (!req.user) throw new CustomError(403, "smtnhg went wrong");
+
       const { maxPrice, minPrice, search, sortBy, sortOrder, category } =
         req.query;
       const page = Number(req.query.page) || 1;
       const pageSize = Number(req.query.pageSize) || 10;
 
       const prodcuts = await getProdcuts(
+        req.user.role,
         page,
         pageSize,
         search,
